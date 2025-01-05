@@ -3,10 +3,12 @@ use std::{
     io::Read,
 };
 
+use markdown::ParseOptions;
+
 fn main() -> Result<(), std::io::Error> {
     let dir_path = "./markdown_files/";
 
-    let mut md_contents = Vec::new();
+    let mut md_contents: Vec<(String, String)> = Vec::new();
 
     for entry in fs::read_dir(dir_path)? {
         let entry = entry?;
@@ -18,7 +20,13 @@ fn main() -> Result<(), std::io::Error> {
             let mut content = String::new();
             file.read_to_string(&mut content)?;
 
-            md_contents.push(content);
+            let mdast = markdown::to_mdast(&content, &ParseOptions::default());
+
+            mdast.into_iter().map(|n| {match(markdown::Table => println!("{:?}", n); _ => pass)});
+
+            println!("{:?}", mdast);
+
+            md_contents.push((path.display().to_string(), content));
 
             println!("Read in {:?}", path);
         }
